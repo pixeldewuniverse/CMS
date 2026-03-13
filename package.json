@@ -1,0 +1,15 @@
+{
+  "name": "vercel-headless-cms-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:admin": "npm run dev --workspace @apps/cms-admin",
+    "dev:client": "npm run dev --workspace @apps/client-site",
+    "build": "npm run build --workspaces",
+    "prisma:generate": "npm run prisma:generate --workspace @packages/database",
+    "prisma:migrate": "npm run prisma:migrate --workspace @packages/database"
+  }
+}
