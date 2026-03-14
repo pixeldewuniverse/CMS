@@ -99,6 +99,34 @@ Pages editor supports:
 - rich text content
 - publish / draft
 
+## Admin Authentication
+
+- Login UI is available at `/login` with email/password fields, submit button, and inline error state.
+- `POST /api/auth/login` validates credentials against Prisma user records, compares bcrypt hash, signs a JWT, and stores it in an HTTP-only cookie.
+- Middleware protects `/dashboard`, `/pages`, and `/posts`; unauthenticated users are redirected to `/login`.
+
+### Prisma User model (hashed password)
+
+```prisma
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(EDITOR)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+```
+
+### Example admin user creation
+
+```bash
+ADMIN_EMAIL=admin@example.com \
+ADMIN_PASSWORD='ChangeMe123!' \
+ADMIN_NAME='Admin User' \
+npm run create:admin --workspace @packages/database
+```
+
 ## 5) Client Site Example
 
 Client app routes:

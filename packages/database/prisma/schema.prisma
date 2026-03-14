@@ -19,15 +19,15 @@ enum PublishStatus {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  passwordHash String
-  name         String
-  role         Role     @default(EDITOR)
-  siteId       String?
-  site         Site?    @relation(fields: [siteId], references: [id])
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   @map("password_hash")
+  name      String
+  role      Role     @default(EDITOR)
+  siteId    String?
+  site      Site?    @relation(fields: [siteId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Site {

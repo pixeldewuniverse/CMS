@@ -8,7 +8,7 @@ async function register(request) {
   const user = await prisma.user.create({
     data: {
       email: body.email,
-      passwordHash,
+      password: passwordHash,
       name: body.name,
       role: body.role || 'ADMIN'
     }
@@ -22,7 +22,7 @@ async function login(request) {
   const user = await prisma.user.findUnique({ where: { email: body.email } });
   if (!user) return { error: { status: 401, message: 'Invalid credentials' } };
 
-  const ok = await comparePassword(body.password, user.passwordHash);
+  const ok = await comparePassword(body.password, user.password);
   if (!ok) return { error: { status: 401, message: 'Invalid credentials' } };
 
   return { data: { token: signToken(user), user: { id: user.id, email: user.email, role: user.role } } };
