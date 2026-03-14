@@ -128,7 +128,8 @@ fetch(`${process.env.NEXT_PUBLIC_CMS_URL}/api/pages?site=mydomain.com`)
 1. Import repository in Vercel.
 2. Set **Root Directory** to `apps/cms-admin`.
 3. Add env vars:
-   - `DATABASE_URL`
+   - `POSTGRES_PRISMA_URL`
+   - `POSTGRES_URL_NON_POOLING`
    - `JWT_SECRET`
 4. Build command: `npm run build`
 5. Output: default Next.js output.
@@ -144,3 +145,16 @@ fetch(`${process.env.NEXT_PUBLIC_CMS_URL}/api/pages?site=mydomain.com`)
 ### Database
 - Run `npm run prisma:generate` and migrations in CI or locally before production rollout.
 - Use a managed PostgreSQL provider (Neon, Supabase, RDS, etc.).
+
+### Example Prisma query (server-side)
+
+```ts
+import { prisma } from '@/lib/prisma';
+
+export async function getPublishedPages(siteId: string) {
+  return prisma.page.findMany({
+    where: { siteId, status: 'PUBLISHED' },
+    orderBy: { updatedAt: 'desc' }
+  });
+}
+```
