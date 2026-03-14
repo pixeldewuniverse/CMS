@@ -126,13 +126,25 @@ fetch(`${process.env.NEXT_PUBLIC_CMS_URL}/api/pages?site=mydomain.com`)
 
 ### Deploy CMS Admin/API
 1. Import repository in Vercel.
-2. Set **Root Directory** to `apps/cms-admin`.
+2. Set **Root Directory** to `apps/cms-admin` (this is required so Vercel outputs `.next` in `apps/cms-admin/.next` instead of expecting `/root/.next`).
 3. Add env vars:
    - `POSTGRES_PRISMA_URL`
    - `POSTGRES_URL_NON_POOLING`
    - `JWT_SECRET`
 4. Build command: `npm run build`
 5. Output: default Next.js output.
+
+### Optional `vercel.json`
+
+At repo root:
+
+```json
+{
+  "framework": "nextjs"
+}
+```
+
+This works with the **Root Directory** still set to `apps/cms-admin` in the Vercel project settings.
 
 ### Deploy Client Site
 1. Create another Vercel project from same repo.
