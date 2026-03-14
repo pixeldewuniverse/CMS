@@ -152,6 +152,27 @@ fetch(`${process.env.NEXT_PUBLIC_CMS_URL}/api/pages?site=mydomain.com`)
 - Root build command explicitly runs Prisma generate first, then `cms-admin` build.
 - `packages/api` includes a no-op build script to prevent Vercel workspace failures (`api build skipped`).
 
+### SWC + lockfile warning fix
+
+If Vercel warns about missing SWC dependencies in lockfile, regenerate lockfile from the repo root:
+
+```bash
+npm install
+npm run build
+```
+
+This refreshes framework-native `next` optional binaries (SWC packages) in lockfile and aligns workspace dependency graph for Vercel builds.
+
+### Tailwind glob warning fix
+
+Tailwind content configuration now uses:
+
+- `./app/**/*.{js,ts,jsx,tsx}`
+- `./components/**/*.{js,ts,jsx,tsx}`
+- `./styles/**/*.css`
+
+This removes invalid glob warnings and ensures classes in `styles/globals.css` are scanned.
+
 ### Deploy CMS Admin/API
 1. Import repository in Vercel.
 2. Set **Root Directory** to `apps/cms-admin` (this is required so Vercel outputs `.next` in `apps/cms-admin/.next` instead of expecting `/root/.next`).
