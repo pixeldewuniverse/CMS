@@ -103,7 +103,9 @@ Pages editor supports:
 
 - Login UI is available at `/login` with email/password fields, submit button, and inline error state.
 - `POST /api/auth/login` validates credentials against Prisma user records, compares bcrypt hash, signs a JWT, and stores it in an HTTP-only cookie.
-- Middleware protects `/dashboard`, `/pages`, and `/posts`; unauthenticated users are redirected to `/login`.
+- Middleware protects `/dashboard`, `/pages`, `/posts`, `/media`, and `/settings`; unauthenticated users are redirected to `/login`.
+- `POST /api/auth/logout` clears the auth cookie and redirects users back to `/login`.
+- Login page is rendered without the dashboard shell/sidebar to keep auth separate from CMS content views.
 
 ### Prisma User model (hashed password)
 
