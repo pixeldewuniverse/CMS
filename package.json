@@ -8,10 +8,9 @@
   "scripts": {
     "dev:admin": "npm run dev --workspace @apps/cms-admin",
     "dev:client": "npm run dev --workspace @apps/client-site",
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run prisma:generate --workspace=@packages/database && npm run build --workspace=@apps/cms-admin",
     "prisma:generate": "npm run prisma:generate --workspace @packages/database",
     "prisma:migrate": "npm run prisma:migrate --workspace @packages/database",
-    "prebuild": "npm run build --workspace @packages/database",
     "postinstall": "npm run prisma:generate"
   }
 }
