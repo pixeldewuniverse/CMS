@@ -119,6 +119,7 @@ fetch(`${process.env.NEXT_PUBLIC_CMS_URL}/api/pages?site=mydomain.com`)
 
 ### Build behavior (important)
 - Root `npm run build` now executes workspace builds with `--if-present`, so every workspace can participate safely.
+- Root `postinstall` runs Prisma generation in the database workspace so Vercel has a generated Prisma Client immediately after `npm install`.
 - `packages/database` has a `build` script that runs `prisma generate`.
 - Root `prebuild` triggers database build first so Prisma client is generated before app builds.
 - `packages/api` includes a no-op build script to prevent Vercel workspace failures (`api build skipped`).

@@ -11,6 +11,7 @@
     "build": "npm run build --workspaces --if-present",
     "prisma:generate": "npm run prisma:generate --workspace @packages/database",
     "prisma:migrate": "npm run prisma:migrate --workspace @packages/database",
-    "prebuild": "npm run build --workspace @packages/database"
+    "prebuild": "npm run build --workspace @packages/database",
+    "postinstall": "npm run prisma:generate"
   }
 }
