@@ -117,6 +117,12 @@ fetch(`${process.env.NEXT_PUBLIC_CMS_URL}/api/pages?site=mydomain.com`)
 
 ## 6) Deployment Instructions (Vercel)
 
+### Build behavior (important)
+- Root `npm run build` now executes workspace builds with `--if-present`, so every workspace can participate safely.
+- `packages/database` has a `build` script that runs `prisma generate`.
+- Root `prebuild` triggers database build first so Prisma client is generated before app builds.
+- `packages/api` includes a no-op build script to prevent Vercel workspace failures (`api build skipped`).
+
 ### Deploy CMS Admin/API
 1. Import repository in Vercel.
 2. Set **Root Directory** to `apps/cms-admin`.
