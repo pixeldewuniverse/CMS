@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 function signToken(user) {
   return jwt.sign(
-    { sub: user.id, email: user.email, role: user.role, siteId: user.siteId || null },
+    { sub: user.id, email: user.email, role: user.role },
     process.env.JWT_SECRET,
     { expiresIn: '1d' }
   );

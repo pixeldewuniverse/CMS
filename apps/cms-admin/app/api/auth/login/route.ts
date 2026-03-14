@@ -1,15 +1,9 @@
 import { compare } from 'bcryptjs';
-import { SignJWT } from 'jose';
 import { NextResponse } from 'next/server';
 import prisma from '@packages/database/src/client';
+import { createAuthToken } from '@/lib/jwt';
 
 const TOKEN_COOKIE = 'cms_admin_token';
-
-function getJwtSecret() {
-  const secret = process.env.JWT_SECRET;
-  if (!secret) throw new Error('JWT_SECRET is not configured');
-  return new TextEncoder().encode(secret);
-}
 
 export async function POST(request: Request) {
   try {
@@ -31,14 +25,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Invalid credentials' }, { status: 401 });
     }
 
-    const token = await new SignJWT({ role: user.role, email: user.email, siteId: user.siteId || null })
-      .setProtectedHeader({ alg: 'HS256' })
-      .setSubject(user.id)
-      .setIssuedAt()
-      .setExpirationTime('1d')
-      .sign(getJwtSecret());
+    const token = await createAuthToken({ sub: user.id, email: user.email, role: user.role });
 
     const response = NextResponse.json({
+      success: true,
       token,
       user: { id: user.id, email: user.email, role: user.role }
     });

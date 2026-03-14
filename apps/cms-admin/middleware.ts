@@ -1,19 +1,16 @@
-import { jwtVerify } from 'jose';
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAuthToken } from '@/lib/jwt';
 
 const TOKEN_COOKIE = 'cms_admin_token';
-const PROTECTED_PREFIXES = ['/dashboard', '/pages', '/posts'];
+const PROTECTED_PREFIXES = ['/dashboard', '/pages', '/posts', '/media', '/settings'];
 
 function isProtectedPath(pathname: string) {
   return PROTECTED_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
 }
 
 async function isTokenValid(token: string) {
-  const secret = process.env.JWT_SECRET;
-  if (!secret) return false;
-
   try {
-    await jwtVerify(token, new TextEncoder().encode(secret));
+    await verifyAuthToken(token);
     return true;
   } catch {
     return false;
@@ -38,5 +35,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/pages/:path*', '/posts/:path*']
+  matcher: ['/dashboard/:path*', '/pages/:path*', '/posts/:path*', '/media/:path*', '/settings/:path*']
 };

@@ -112,9 +112,8 @@ model User {
   id        String   @id @default(cuid())
   email     String   @unique
   password  String
-  role      Role     @default(EDITOR)
+  role      String   @default("ADMIN")
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 ```
 
@@ -122,10 +121,17 @@ model User {
 
 ```bash
 ADMIN_EMAIL=admin@example.com \
-ADMIN_PASSWORD='ChangeMe123!' \
-ADMIN_NAME='Admin User' \
-npm run create:admin --workspace @packages/database
+ADMIN_PASSWORD='admin123' \
+npm run create:admin:ts --workspace @packages/database
 ```
+
+Protected admin routes via middleware:
+
+- `/dashboard`
+- `/pages`
+- `/posts`
+- `/media`
+- `/settings`
 
 ## 5) Client Site Example
 

@@ -9,7 +9,6 @@ async function register(request) {
     data: {
       email: body.email,
       password: passwordHash,
-      name: body.name,
       role: body.role || 'ADMIN'
     }
   });
