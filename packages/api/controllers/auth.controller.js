@@ -4,10 +4,12 @@ const { signToken, hashPassword, comparePassword } = require('../services/auth.s
 async function register(request) {
   const body = await request.json();
   const passwordHash = await hashPassword(body.password);
+  const username = body.username || String(body.email || '').split('@')[0] || `user-${Date.now()}`;
 
   const user = await prisma.user.create({
     data: {
       email: body.email,
+      username,
       password: passwordHash,
       role: body.role || 'ADMIN'
     }

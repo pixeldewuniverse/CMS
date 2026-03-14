@@ -8,7 +8,8 @@
     "prisma:migrate": "prisma migrate dev",
     "build": "prisma generate",
     "create:admin": "node scripts/create-admin-user.js",
-    "create:admin:ts": "tsx scripts/create-admin.ts"
+    "create:admin:ts": "tsx scripts/create-admin.ts",
+    "seed": "ts-node scripts/create-super-admin.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.17.0",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "prisma": "^5.17.0",
+    "ts-node": "^10.9.2",
     "tsx": "^4.19.2"
   }
 }

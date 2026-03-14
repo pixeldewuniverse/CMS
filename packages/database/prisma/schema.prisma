@@ -15,8 +15,9 @@ enum PublishStatus {
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
+  username  String   @unique
   password  String   @map("password_hash")
-  role      String   @default("ADMIN")
+  role      String   @default("SUPER_ADMIN")
   createdAt DateTime @default(now())
 }
 

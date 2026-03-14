@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const prisma = require('../src/client');
 
 async function main() {
+  const username = process.env.ADMIN_USERNAME || 'admin';
   const email = process.env.ADMIN_EMAIL || 'admin@example.com';
   const password = process.env.ADMIN_PASSWORD || 'admin123';
 
@@ -9,8 +10,8 @@ async function main() {
 
   const user = await prisma.user.upsert({
     where: { email },
-    update: { password: hash, role: 'ADMIN' },
-    create: { email, password: hash, role: 'ADMIN' }
+    update: { username, password: hash, role: 'ADMIN' },
+    create: { email, username, password: hash, role: 'ADMIN' }
   });
 
   console.log(`Admin user ready: ${user.email}`);

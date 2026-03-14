@@ -113,8 +113,9 @@ Pages editor supports:
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
+  username  String   @unique
   password  String
-  role      String   @default("ADMIN")
+  role      String   @default("SUPER_ADMIN")
   createdAt DateTime @default(now())
 }
 ```
@@ -125,6 +126,26 @@ model User {
 ADMIN_EMAIL=admin@example.com \
 ADMIN_PASSWORD='admin123' \
 npm run create:admin:ts --workspace @packages/database
+```
+
+### Super Admin bootstrap script
+
+`packages/database/scripts/create-super-admin.ts` creates a default Super Admin if one does not already exist:
+
+- username: `superadmin`
+- email: `admin@cms.com`
+- password: `admin123`
+
+Run it from repo root:
+
+```bash
+npm run seed --workspace @packages/database
+```
+
+Or run directly inside `packages/database`:
+
+```bash
+npx ts-node scripts/create-super-admin.ts
 ```
 
 Protected admin routes via middleware:
