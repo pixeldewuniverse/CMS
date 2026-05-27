@@ -115,7 +115,7 @@ export default function IdeasList({
                     <button
                       type="button"
                       onClick={() =>
-                        setExpandedId(expandedId === idea._id ? null : idea._id)
+                        setExpandedId(expandedId === idea._id ? null : (idea._id ?? null))
                       }
                       className="text-sm text-slate-500 hover:text-slate-700"
                     >

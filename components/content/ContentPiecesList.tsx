@@ -106,7 +106,7 @@ export default function ContentPiecesList({
               <button
                 type="button"
                 onClick={() =>
-                  setExpandedId(expandedId === piece._id ? null : piece._id)
+                  setExpandedId(expandedId === piece._id ? null : (piece._id ?? null))
                 }
                 className="text-sm text-slate-500 hover:text-slate-700"
               >

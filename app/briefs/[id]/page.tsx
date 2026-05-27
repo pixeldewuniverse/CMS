@@ -113,6 +113,8 @@ export default function BriefDetailPage() {
       setGeneratingContent(false);
     }
   };
+
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-slate-600">Loading brief...</div>

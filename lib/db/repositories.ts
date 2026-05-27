@@ -25,7 +25,7 @@ export const briefRepository = {
     const db = await connectMongoDB();
     return db
       .collection<BusinessBrief>("briefs")
-      .findOne({ _id: new ObjectId(id) });
+      .findOne({ _id: new ObjectId(id) as any });
   },
 
   async findByUserId(userId: string): Promise<BusinessBrief[]> {
@@ -43,7 +43,7 @@ export const briefRepository = {
   ): Promise<BusinessBrief | null> {
     const db = await connectMongoDB();
     const result = await db.collection("briefs").findOneAndUpdate(
-      { _id: new ObjectId(id) },
+      { _id: new ObjectId(id) as any },
       {
         $set: {
           ...updates,
@@ -60,7 +60,7 @@ export const briefRepository = {
     const result = await db
       .collection("briefs")
       .updateOne(
-        { _id: new ObjectId(id) },
+        { _id: new ObjectId(id) as any },
         { $set: { status: "archived", updatedAt: new Date() } }
       );
     return result.modifiedCount > 0;
@@ -110,7 +110,7 @@ export const ideaRepository = {
     if (status === "rejected") updateData.rejectionReason = reason;
 
     const result = await db.collection("contentIdeas").findOneAndUpdate(
-      { _id: new ObjectId(id) },
+      { _id: new ObjectId(id) as any },
       { $set: updateData },
       { returnDocument: "after" }
     );
@@ -169,7 +169,7 @@ export const contentRepository = {
     if (bufferId) updateData["scheduleInfo.bufferId"] = bufferId;
 
     const result = await db.collection("contentPieces").findOneAndUpdate(
-      { _id: new ObjectId(id) },
+      { _id: new ObjectId(id) as any },
       { $set: updateData },
       { returnDocument: "after" }
     );
@@ -182,7 +182,7 @@ export const contentRepository = {
   ): Promise<ContentPiece | null> {
     const db = await connectMongoDB();
     const result = await db.collection("contentPieces").findOneAndUpdate(
-      { _id: new ObjectId(id) },
+      { _id: new ObjectId(id) as any },
       {
         $set: {
           performance,
@@ -222,7 +222,7 @@ export const calendarRepository = {
       calendar = { _id: result.insertedId.toString() } as any;
     }
 
-    return calendar;
+    return calendar as unknown as ContentCalendar;
   },
 
   async addToSchedule(
@@ -234,7 +234,7 @@ export const calendarRepository = {
   ): Promise<ContentCalendar | null> {
     const db = await connectMongoDB();
     const result = await db.collection("contentCalendars").findOneAndUpdate(
-      { _id: new ObjectId(calendarId) },
+      { _id: new ObjectId(calendarId) as any },
       {
         $push: {
           schedule: {
@@ -244,7 +244,7 @@ export const calendarRepository = {
             scheduledTime,
             status: "scheduled",
           },
-        },
+        } as any,
         $set: { "metadata.updatedAt": new Date() },
       },
       { returnDocument: "after" }
@@ -274,6 +274,6 @@ export const userRepository = {
 
   async findById(id: string): Promise<User | null> {
     const db = await connectMongoDB();
-    return db.collection<User>("users").findOne({ _id: new ObjectId(id) });
+    return db.collection<User>("users").findOne({ _id: new ObjectId(id) as any });
   },
 };

@@ -35,6 +35,7 @@ export async function POST(request: NextRequest) {
         description: idea.description,
         generatedBy: 'claude-opus',
         status: 'suggested',
+        metadata: { createdAt: new Date(), updatedAt: new Date(), usageCount: 0 },
       });
       savedIdeas.push(saved);
     }

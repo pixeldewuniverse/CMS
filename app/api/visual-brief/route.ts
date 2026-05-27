@@ -28,20 +28,22 @@ export async function POST(request: NextRequest) {
 
     // Get content piece
     const db = await connectMongoDB();
-    const contentPiece = await db.collection('contentPieces').findOne({
+    const contentPieceDoc = await db.collection('contentPieces').findOne({
       _id: new ObjectId(contentPieceId),
     });
 
-    if (!contentPiece) {
+    if (!contentPieceDoc) {
       return NextResponse.json(
         { error: 'Content piece not found' },
         { status: 404 }
       );
     }
 
+    const contentPiece = contentPieceDoc as unknown as import('@/lib/db/schema').ContentPiece;
+
     // Get idea
     const idea = await ideaRepository.findByBriefId(briefId).then((ideas) =>
-      ideas.find((i) => i._id.toString() === contentPiece.ideaId)
+      ideas.find((i) => i._id?.toString() === contentPiece.ideaId)
     );
 
     if (!idea) {

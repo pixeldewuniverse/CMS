@@ -5,10 +5,11 @@ import type { BusinessBrief } from '@/lib/db/schema';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
-    const brief = await briefRepository.findById(params.id);
+    const brief = await briefRepository.findById(id);
 
     if (!brief) {
       return NextResponse.json({ error: 'Brief not found' }, { status: 404 });
@@ -16,7 +17,7 @@ export async function GET(
 
     return NextResponse.json(brief, { status: 200 });
   } catch (error) {
-    console.error(`[GET /api/briefs/${params.id}]`, error);
+    console.error(`[GET /api/briefs/${id}]`, error);
     return NextResponse.json(
       { error: 'Failed to fetch brief' },
       { status: 500 }
@@ -26,14 +27,14 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const body = await request.json();
 
     const updates: Partial<BusinessBrief> = {};
 
-    // Only update allowed fields
     const allowedFields = [
       'name',
       'description',
@@ -61,7 +62,7 @@ export async function PUT(
       );
     }
 
-    const brief = await briefRepository.update(params.id, updates);
+    const brief = await briefRepository.update(id, updates);
 
     if (!brief) {
       return NextResponse.json({ error: 'Brief not found' }, { status: 404 });
@@ -69,7 +70,7 @@ export async function PUT(
 
     return NextResponse.json(brief, { status: 200 });
   } catch (error) {
-    console.error(`[PUT /api/briefs/${params.id}]`, error);
+    console.error(`[PUT /api/briefs/${id}]`, error);
     return NextResponse.json(
       { error: 'Failed to update brief' },
       { status: 500 }
@@ -79,10 +80,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
-    const success = await briefRepository.delete(params.id);
+    const success = await briefRepository.delete(id);
 
     if (!success) {
       return NextResponse.json({ error: 'Brief not found' }, { status: 404 });
@@ -93,7 +95,7 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
-    console.error(`[DELETE /api/briefs/${params.id}]`, error);
+    console.error(`[DELETE /api/briefs/${id}]`, error);
     return NextResponse.json(
       { error: 'Failed to delete brief' },
       { status: 500 }

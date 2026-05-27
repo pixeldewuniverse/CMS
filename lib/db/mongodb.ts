@@ -1,12 +1,7 @@
 // lib/db/mongodb.ts
 import { MongoClient, Db } from "mongodb";
 
-const MONGODB_URI = process.env.MONGODB_URI!;
 const DB_NAME = "content-calendar";
-
-if (!MONGODB_URI) {
-  throw new Error("MONGODB_URI tidak didefinisikan di environment variables");
-}
 
 let cachedClient: MongoClient | null = null;
 let cachedDb: Db | null = null;
@@ -14,6 +9,11 @@ let cachedDb: Db | null = null;
 export async function connectMongoDB(): Promise<Db> {
   if (cachedDb) {
     return cachedDb;
+  }
+
+  const MONGODB_URI = process.env.MONGODB_URI;
+  if (!MONGODB_URI) {
+    throw new Error("MONGODB_URI tidak didefinisikan di environment variables");
   }
 
   if (!cachedClient) {

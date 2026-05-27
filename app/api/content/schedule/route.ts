@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
               scheduledTime: scheduledTime,
               status: 'scheduled',
             },
-          },
+          } as any,
           $set: { 'metadata.updatedAt': new Date() },
         },
         { upsert: true }
