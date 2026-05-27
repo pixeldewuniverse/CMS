@@ -131,16 +131,14 @@ export async function generateCaptionsForAllPlatforms(
     )
   );
 
-  for (const result of results) {
+  for (let i = 0; i < results.length; i++) {
+    const result = results[i];
+    const platform = enabledPlatforms[i];
     if (result.status === 'fulfilled') {
       captions[result.value.platform] = result.value.caption;
     } else {
-      console.error(
-        `Failed to generate caption for platform:`,
-        result.reason
-      );
-      // Fallback to generic caption if generation fails
-      captions[result.reason.platform || ''] = {
+      console.error(`Failed to generate caption for ${platform}:`, result.reason);
+      captions[platform] = {
         caption: idea.description,
         hashtags: [],
       };

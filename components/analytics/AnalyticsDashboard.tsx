@@ -187,7 +187,7 @@ export default function AnalyticsDashboard({
         <div className="card p-6 bg-gradient-to-br from-purple-50 to-purple-100">
           <p className="text-xs font-medium text-slate-600 mb-1">TOTAL REACH</p>
           <p className="text-3xl font-bold text-purple-700">
-            {(analytics.summary.totalReach / 1000).toFixed(1)}K
+            {((analytics.summary.totalReach ?? 0) / 1000).toFixed(1)}K
           </p>
           <p className="text-xs text-slate-600 mt-2">People reached</p>
         </div>
@@ -197,7 +197,7 @@ export default function AnalyticsDashboard({
             AVG ENGAGEMENT RATE
           </p>
           <p className="text-3xl font-bold text-orange-700">
-            {analytics.summary.avgEngagementRate.toFixed(2)}%
+            {(analytics.summary.avgEngagementRate ?? 0).toFixed(2)}%
           </p>
           <p className="text-xs text-slate-600 mt-2">Per post</p>
         </div>

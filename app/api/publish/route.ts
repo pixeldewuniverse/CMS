@@ -128,11 +128,14 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const service = request.nextUrl.searchParams.get('service');
-    const accessToken = request.nextUrl.searchParams.get('accessToken');
+    const authHeader = request.headers.get('authorization');
+    const accessToken = authHeader?.startsWith('Bearer ')
+      ? authHeader.slice(7)
+      : null;
 
     if (!service || !accessToken) {
       return NextResponse.json(
-        { error: 'service and accessToken required' },
+        { error: 'service query param and Authorization header required' },
         { status: 400 }
       );
     }

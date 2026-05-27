@@ -34,7 +34,8 @@ export default function PublishButton({
     try {
       // Fetch profiles dari service
       const response = await fetch(
-        `/api/publish?service=${selectedService}&accessToken=${accessToken}`
+        `/api/publish?service=${selectedService}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
       );
 
       if (!response.ok) {

@@ -74,7 +74,14 @@ export default function BriefForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          userId: 'user-placeholder', // TODO: Get from auth context
+          userId: (() => {
+            let id = localStorage.getItem('_uid');
+            if (!id) {
+              id = `u-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+              localStorage.setItem('_uid', id);
+            }
+            return id;
+          })(),
           status: 'active',
         }),
       });

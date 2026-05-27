@@ -108,18 +108,23 @@ export async function GET(request: NextRequest) {
       }));
     }
 
-    // Save analytics to database
-    await db.collection('performanceAnalytics').insertOne({
-      briefId,
-      period: {
-        startDate: new Date(),
-        endDate: new Date(),
+    // Upsert analytics snapshot (once per day per brief)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    await db.collection('performanceAnalytics').updateOne(
+      { briefId, 'period.startDate': today },
+      {
+        $set: {
+          briefId,
+          period: { startDate: today, endDate: new Date() },
+          platformStats: calculatePlatformStats(contentPieces),
+          summary: analytics.summary,
+          aiRecommendations: analytics.insights?.recommendations || [],
+          generatedAt: new Date(),
+        },
       },
-      platformStats: calculatePlatformStats(contentPieces),
-      summary: analytics.summary,
-      aiRecommendations: analytics.insights?.recommendations || [],
-      generatedAt: new Date(),
-    });
+      { upsert: true }
+    );
 
     return NextResponse.json(analytics, { status: 200 });
   } catch (error) {

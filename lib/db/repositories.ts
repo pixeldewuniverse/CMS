@@ -52,7 +52,7 @@ export const briefRepository = {
       },
       { returnDocument: "after" }
     );
-    return result.value as BusinessBrief | null;
+    return result as BusinessBrief | null;
   },
 
   async delete(id: string): Promise<boolean> {
@@ -114,7 +114,7 @@ export const ideaRepository = {
       { $set: updateData },
       { returnDocument: "after" }
     );
-    return result.value as ContentIdea | null;
+    return result as ContentIdea | null;
   },
 };
 
@@ -173,7 +173,7 @@ export const contentRepository = {
       { $set: updateData },
       { returnDocument: "after" }
     );
-    return result.value as ContentPiece | null;
+    return result as ContentPiece | null;
   },
 
   async updatePerformance(
@@ -191,7 +191,7 @@ export const contentRepository = {
       },
       { returnDocument: "after" }
     );
-    return result.value as ContentPiece | null;
+    return result as ContentPiece | null;
   },
 };
 
@@ -249,7 +249,7 @@ export const calendarRepository = {
       },
       { returnDocument: "after" }
     );
-    return result.value as ContentCalendar | null;
+    return result as ContentCalendar | null;
   },
 };
 

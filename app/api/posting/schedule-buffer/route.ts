@@ -123,6 +123,11 @@ export async function POST(request: NextRequest) {
  * Publish scheduled posts (cron job)
  */
 export async function PUT(request: NextRequest) {
+  const cronSecret = request.headers.get('x-cron-secret');
+  if (!process.env.CRON_SECRET || cronSecret !== process.env.CRON_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const db = await connectMongoDB();
 
