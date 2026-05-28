@@ -123,8 +123,12 @@ export async function POST(request: NextRequest) {
  * Publish scheduled posts (cron job)
  */
 export async function PUT(request: NextRequest) {
+  if (!process.env.CRON_SECRET) {
+    console.error('[PUT /api/posting/schedule-buffer] CRON_SECRET is not configured');
+    return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 });
+  }
   const cronSecret = request.headers.get('x-cron-secret');
-  if (!process.env.CRON_SECRET || cronSecret !== process.env.CRON_SECRET) {
+  if (cronSecret !== process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

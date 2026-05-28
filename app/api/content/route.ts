@@ -21,9 +21,7 @@ export async function POST(request: NextRequest) {
 
     // Get brief & idea
     const brief = await briefRepository.findById(briefId);
-    const idea = await ideaRepository.findByBriefId(briefId).then((ideas) =>
-      ideas.find((i) => i._id?.toString() === ideaId)
-    );
+    const idea = await ideaRepository.findById(ideaId);
 
     if (!brief || !idea) {
       return NextResponse.json(

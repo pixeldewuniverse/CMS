@@ -42,9 +42,7 @@ export async function POST(request: NextRequest) {
     const contentPiece = contentPieceDoc as unknown as import('@/lib/db/schema').ContentPiece;
 
     // Get idea
-    const idea = await ideaRepository.findByBriefId(briefId).then((ideas) =>
-      ideas.find((i) => i._id?.toString() === contentPiece.ideaId)
-    );
+    const idea = await ideaRepository.findById(contentPiece.ideaId);
 
     if (!idea) {
       return NextResponse.json({ error: 'Idea not found' }, { status: 404 });
@@ -74,11 +72,6 @@ export async function POST(request: NextRequest) {
         },
       }
     );
-
-    // Fetch updated piece
-    const updated = await db.collection('contentPieces').findOne({
-      _id: new ObjectId(contentPieceId),
-    });
 
     return NextResponse.json(
       {

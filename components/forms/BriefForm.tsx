@@ -77,7 +77,7 @@ export default function BriefForm() {
           userId: (() => {
             let id = localStorage.getItem('_uid');
             if (!id) {
-              id = `u-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+              id = crypto.randomUUID();
               localStorage.setItem('_uid', id);
             }
             return id;

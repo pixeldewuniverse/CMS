@@ -22,6 +22,7 @@ export const briefRepository = {
   },
 
   async findById(id: string): Promise<BusinessBrief | null> {
+    if (!ObjectId.isValid(id)) return null;
     const db = await connectMongoDB();
     return db
       .collection<BusinessBrief>("briefs")
@@ -41,6 +42,7 @@ export const briefRepository = {
     id: string,
     updates: Partial<BusinessBrief>
   ): Promise<BusinessBrief | null> {
+    if (!ObjectId.isValid(id)) return null;
     const db = await connectMongoDB();
     const result = await db.collection("briefs").findOneAndUpdate(
       { _id: new ObjectId(id) as any },
@@ -56,6 +58,7 @@ export const briefRepository = {
   },
 
   async delete(id: string): Promise<boolean> {
+    if (!ObjectId.isValid(id)) return false;
     const db = await connectMongoDB();
     const result = await db
       .collection("briefs")
@@ -99,11 +102,20 @@ export const ideaRepository = {
       .toArray();
   },
 
+  async findById(id: string): Promise<ContentIdea | null> {
+    if (!ObjectId.isValid(id)) return null;
+    const db = await connectMongoDB();
+    return db
+      .collection<ContentIdea>("contentIdeas")
+      .findOne({ _id: new ObjectId(id) as any });
+  },
+
   async updateStatus(
     id: string,
     status: ContentIdea["status"],
     reason?: string
   ): Promise<ContentIdea | null> {
+    if (!ObjectId.isValid(id)) return null;
     const db = await connectMongoDB();
     const updateData: any = { status, "metadata.updatedAt": new Date() };
     if (status === "approved") updateData.approvedAt = new Date();
@@ -160,6 +172,7 @@ export const contentRepository = {
     status: "draft" | "scheduled" | "posted" | "failed",
     bufferId?: string
   ): Promise<ContentPiece | null> {
+    if (!ObjectId.isValid(id)) return null;
     const db = await connectMongoDB();
     const updateData: any = {
       "scheduleInfo.status": status,
@@ -180,6 +193,7 @@ export const contentRepository = {
     id: string,
     performance: ContentPiece["performance"]
   ): Promise<ContentPiece | null> {
+    if (!ObjectId.isValid(id)) return null;
     const db = await connectMongoDB();
     const result = await db.collection("contentPieces").findOneAndUpdate(
       { _id: new ObjectId(id) as any },
@@ -211,15 +225,17 @@ export const calendarRepository = {
     });
 
     if (!calendar) {
-      const result = await db.collection("contentCalendars").insertOne({
+      const now = new Date();
+      const newCalendar = {
         briefId,
         userId,
         month,
         year,
-        schedule: [],
-        metadata: { createdAt: new Date(), updatedAt: new Date() },
-      });
-      calendar = { _id: result.insertedId.toString() } as any;
+        schedule: [] as ContentCalendar["schedule"],
+        metadata: { createdAt: now, updatedAt: now },
+      };
+      const result = await db.collection("contentCalendars").insertOne(newCalendar);
+      calendar = { _id: result.insertedId.toString(), ...newCalendar } as any;
     }
 
     return calendar as unknown as ContentCalendar;
@@ -232,6 +248,7 @@ export const calendarRepository = {
     scheduledDate: Date,
     scheduledTime: string
   ): Promise<ContentCalendar | null> {
+    if (!ObjectId.isValid(calendarId)) return null;
     const db = await connectMongoDB();
     const result = await db.collection("contentCalendars").findOneAndUpdate(
       { _id: new ObjectId(calendarId) as any },
@@ -273,6 +290,7 @@ export const userRepository = {
   },
 
   async findById(id: string): Promise<User | null> {
+    if (!ObjectId.isValid(id)) return null;
     const db = await connectMongoDB();
     return db.collection<User>("users").findOne({ _id: new ObjectId(id) as any });
   },
