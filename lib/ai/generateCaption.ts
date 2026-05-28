@@ -75,7 +75,7 @@ ${platformTones[platform] || 'Engaging and relevant to the platform.'}
 `;
 
   const message = await anthropic.messages.create({
-    model: 'claude-opus-4-20250805',
+    model: 'claude-sonnet-4-6',
     max_tokens: 1000,
     messages: [
       {
